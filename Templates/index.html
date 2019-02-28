@@ -1,0 +1,183 @@
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="jumbotron text-justify">
+    <!-- Button trigger modal -->
+    <div class="btn-group-horizontal">
+        <button type="button" class="btn btn-success btn-lg active" role="button" aria-pressed="true"
+                data-toggle="modal" data-target="#exampleModal">View Project Progress
+        </button>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">project_name</th>
+                <th scope="col">project_desc</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Cost</th>
+                <th scope="col">Status</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for projects in records %}
+            <tr>
+                <th scope="row">{{projects[0]}}</th>
+                <td>{{projects[1]}}</td>
+                <td>{{projects[2]}}</td>
+                <td>{{projects[3]}}</td>
+                <td>{{projects[4]}}</td>
+                <td>{{projects[5]}}</td>
+                <td>{{projects[6]}}</td>
+                <td><!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=#{{projects[0]}}">
+                        Edit
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id=#{{projects[0]}}" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/project/edit{{projects[0]}}" method="post">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Project Title</label>
+                                            <input type="text" value="{{projects[1]}}" class="form-control"
+                                                   name="title" aria-describedby="emailHelp"
+                                                   placeholder="Enter Project Title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Project Description</label>
+                                            <input type="text" value="{{projects[2]}}" class="form-control"
+                                                   name="description" aria-describedby="emailHelp"
+                                                   placeholder="Enter Project Description">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Start Date</label>
+                                            <input type="date" value="{{projects[3]}}" class="form-control"
+                                                   name="startDate" aria-describedby="emailHelp"
+                                                   placeholder="DD-MON-YYYY">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">End Date</label>
+                                            <input type="date" value="{{projects[4]}}" class="form-control"
+                                                   name="endDate" aria-describedby="emailHelp"
+                                                   placeholder="DD-MON-YYYY">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Project Cost</label>
+                                            <input type="text" value="{{projects[5]}}" class="form-control"
+                                                   name="cost"
+                                                   aria-describedby="emailHelp"
+                                                   placeholder="Ksh X,XXX,XXX">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Project Status</label>
+                                            <select class="form-control" name="status">
+                                                <option>--SELECT--</option>
+                                                <option>Pending</option>
+                                                <option>Started</option>
+                                                <option>Completed</option>
+                                                <option>Abandoned</option>
+                                                <option>Submitted</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <form action="/project/delete {{projects[0]}} " method="DELETE"></form>
+                    <button class="btn-danger">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <img src="{{ graph|safe }}" height="400px" type="image/svg"/>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><strong>Project Progress Form</strong></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/project/create" method="post">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Project Title</label>
+                            <input type="text" class="form-control" name="title" aria-describedby="emailHelp"
+                                   placeholder="Enter Project Title">
+                            <small id="projectHelp" class="form-text text-muted">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Project Description</label>
+                            <input type="text" class="form-control" name="description" aria-describedby="emailHelp"
+                                   placeholder="Enter Project Description">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Start Date</label>
+                            <input type="date" class="form-control" name="startDate" aria-describedby="emailHelp"
+                                   placeholder="DD-MON-YYYY">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">End Date</label>
+                            <input type="date" class="form-control" name="endDate" aria-describedby="emailHelp"
+                                   placeholder="DD-MON-YYYY">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Project Cost</label>
+                            <input type="text" class="form-control" name="cost"
+                                   aria-describedby="emailHelp"
+                                   placeholder="Ksh X,XXX,XXX">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Project Status</label>
+                            <select class="form-control" name="status">
+                                <option>--SELECT--</option>
+                                <option>Pending</option>
+                                <option>Started</option>
+                                <option>Completed</option>
+                                <option>Abandoned</option>
+                                <option>Submitted</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
